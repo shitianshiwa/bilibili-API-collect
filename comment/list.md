@@ -1,6 +1,15 @@
 # 评论区明细
 
-## 获取评论区明细1（无楼层号）
+- [获取评论区明细（无楼层号）](#获取评论区明细（无楼层号）)
+- [获取评论区明细（带有楼层号 ）](#获取评论区明细（带有楼层号 ）)
+- [获取指定评论条目及二级回复明细（分离结构 无楼层号）](#获取指定评论条目及二级回复明细（分离结构 无楼层号）)
+- [获取指定评论条目及二级回复明细（嵌套结构 带有楼层号）](#获取指定评论条目及二级回复明细（嵌套结构 带有楼层号）)
+- [获取指定评论对话树（带有楼层）](#获取指定评论对话树（带有楼层）)
+- [获取评论区评论总数](#获取评论区评论总数)
+
+---
+
+## 获取评论区明细（无楼层号）
 
 > http://api.bilibili.com/x/v2/reply
 
@@ -36,19 +45,19 @@
 | 字段         | 类型                             | 内容     | 备注             |
 | ------------ | -------------------------------- | -------- | ---------------- |
 | page         | obj                              | 页信息   |                  |
-| config       | obj                              | 属性信息 |                  |
-| replies      | 禁用时：null<br />正常时：array | 评论根列表 |                  |
-| hots         | 禁用时：null<br />正常时：array | 热评根列表 |                  |
+| config       | obj                              | 评论区显示控制 |                  |
+| replies      | 禁用时：null<br />正常时：array | 评论列表 |                  |
+| hots         | 禁用时：null<br />正常时：array | 热评列表 |                  |
 | upper        | obj                              | 置顶评论 |                  |
 | top          | null                             | -        | **作用尚不明确** |
 | notice       | 无效时：null<br />有效时：obj            | 评论区公告信息 |  |
 | vote         | num                              | 0        | **作用尚不明确** |
 | blacklist    | num                              | 0        | **作用尚不明确** |
 | assist       | num                              | 0        | **作用尚不明确** |
-| mode         | num                              | 3        | **作用尚不明确** |
-| support_mode | array                           | ？？？   | **作用尚不明确** |
-| folder       | obj                              | ??? | **作用尚不明确** |
-| lottery_card | null                             | -        | **作用尚不明确** |
+| mode         | num                              | 评论区类型id |  |
+| support_mode | array                           | 评论区支持的类型id |  |
+| folder       | obj                              | 折叠相关信息 |  |
+| lottery_card | null                             | -       | **作用尚不明确** |
 | show_bvid    | bool                             | true     | **作用尚不明确** |
 | control      | obj                              | 评论区输入属性 |                  |
 
@@ -63,15 +72,15 @@
 
 `data`中的`config`对象：
 
-| 字段         | 类型 | 内容  | 备注             |
-| ------------ | ---- | ----- | ---------------- |
-| showadmin    | num  | 1     | **作用尚不明确** |
-| showentry    | num  | 1     | **作用尚不明确** |
-| showfloor    | num  | 0     | **作用尚不明确** |
-| showtopic    | num  | 1     | **作用尚不明确** |
-| show_up_flag | bool | true  | **作用尚不明确** |
-| read_only    | bool | false | **作用尚不明确** |
-| show_del_log | bool | false | **作用尚不明确** |
+| 字段         | 类型 | 内容                     | 备注 |
+| ------------ | ---- | ------------------------ | ---- |
+| showadmin    | num  | 是否显示管理置顶         |      |
+| showentry    | num  | ？                       |      |
+| showfloor    | num  | 是否显示楼层号           |      |
+| showtopic    | num  | 是否显示话题             |      |
+| show_up_flag | bool | 是否显示“UP觉得很赞”标志 |      |
+| read_only    | bool | 是否只读评论区           |      |
+| show_del_log | bool | 是否显示删除记录         |      |
 
 `data`中的`replies`数组：
 
@@ -91,11 +100,11 @@
 
 `data`中的`upper`对象：
 
-| 字段 | 类型                          | 内容     | 备注                                   |
-| ---- | ----------------------------- | -------- | -------------------------------------- |
-| mid  | num                           | UP主UID  |                                        |
-| top  | 有效时：obj<br />无效时：null | 置顶条目 | [对象定义见表](readme.md#评论条目对象) |
-| vote | null                          | -        |                                        |
+| 字段 | 类型                          | 内容       | 备注                                   |
+| ---- | ----------------------------- | ---------- | -------------------------------------- |
+| mid  | num                           | UP主UID    |                                        |
+| top  | 有效时：obj<br />无效时：null | 置顶条目   | [对象定义见表](readme.md#评论条目对象) |
+| vote | 有效时：obj<br />无效时：null | 投票评论？ |                                        |
 
 `data`中的`notice`对象：
 
@@ -116,11 +125,11 @@
 
 `data`中的`folder`对象：
 
-| 字段       | 类型 | 内容   | 备注             |
-| ---------- | ---- | ------ | ---------------- |
-| has_folded | bool | false  | **作用尚不明确** |
-| is_folded  | bool | false  | **作用尚不明确** |
-| rule       | str  | ？？？ | **作用尚不明确** |
+| 字段       | 类型 | 内容                   | 备注             |
+| ---------- | ---- | ---------------------- | ---------------- |
+| has_folded | bool | 评论区是否存在折叠评论 |                  |
+| is_folded  | bool | false                  | **作用尚不明确** |
+| rule       | str  | 相关规则页面url        |                  |
 
 `data`中的`control`对象：
 
@@ -2319,7 +2328,7 @@ curl -G 'http://api.bilibili.com/x/v2/reply' \
 
 </details>
 
-## 获取评论区明细2（带有楼层号 ）
+## 获取评论区明细（带有楼层号 ）
 
 > http://api.bilibili.com/x/v2/reply/main
 
@@ -2353,21 +2362,21 @@ curl -G 'http://api.bilibili.com/x/v2/reply' \
 
 | 字段         | 类型                             | 内容     | 备注             |
 | ------------ | -------------------------------- | -------- | ---------------- |
-| cursor    | obj                              | 页信息   |                  |
-| hots         | 禁用时：null<br />正常时：array | 热评根列表 |                  |
+| cursor    | obj                              | 游标信息 |                  |
+| hots         | 禁用时：null<br />正常时：array | 热评列表 |                  |
 | notice       | 无效时：null<br />有效时：obj            | 评论区公告信息 |  |
-| replies      | 禁用时：null<br />正常时：array | 评论根列表 |                  |
-| top          | obj                       | -        | **作用尚不明确** |
-| lottery_card | null                             | -        | **作用尚不明确** |
-| folder       | obj                              | ??? | **作用尚不明确** |
+| replies      | 禁用时：null<br />正常时：array | 评论列表 |                  |
+| top          | obj                       | 置顶评论 |  |
+| lottery_card | null                             | 抽奖评论    |  |
+| folder       | obj                              | 评论折叠信息 |  |
 | assist       | num                              | 0        | **作用尚不明确** |
 | blacklist    | num                              | 0        | **作用尚不明确** |
 | vote         | num                              | 0        | **作用尚不明确** |
 | lottery | num | 0 | **作用尚不明确** |
-| config       | obj                              | 属性信息 |                  |
+| config       | obj                              | 评论区显示控制 |                  |
 | upper        | obj                              | UP主信息 |                  |
-| mode         | num                              | 3        | **作用尚不明确** |
-| support_mode | array                           | ？？？   | **作用尚不明确** |
+| mode         | num                              | 评论区类型id |  |
+| support_mode | array                           | 评论区支持的类型id |  |
 | show_bvid    | bool                             | true     | **作用尚不明确** |
 | control      | obj                              | 评论区输入属性 |                  |
 
@@ -2395,23 +2404,23 @@ curl -G 'http://api.bilibili.com/x/v2/reply' \
 
 `data`中的`top`对象：
 
-| 字段  | 类型                          | 内容     | 备注                                   |
-| ----- | ----------------------------- | -------- | -------------------------------------- |
-| admin | null                          | -        |                                        |
-| upper | 有效时：obj<br />无效时：null | 置顶条目 | [对象定义见表](readme.md#评论条目对象) |
-| vote  | null                          | -        |                                        |
+| 字段  | 类型                          | 内容           | 备注                                   |
+| ----- | ----------------------------- | -------------- | -------------------------------------- |
+| admin | 有效时：obj<br />无效时：null | 管理员置顶条目 | [对象定义见表](readme.md#评论条目对象) |
+| upper | 有效时：obj<br />无效时：null | UP主置顶条目   | [对象定义见表](readme.md#评论条目对象) |
+| vote  | 有效时：obj<br />无效时：null | 投票置顶条目   | [对象定义见表](readme.md#评论条目对象) |
 
 `data`中的`config`对象：
 
-| 字段         | 类型 | 内容  | 备注             |
-| ------------ | ---- | ----- | ---------------- |
-| showadmin    | num  | 1     | **作用尚不明确** |
-| showentry    | num  | 1     | **作用尚不明确** |
-| showfloor    | num  | 0     | **作用尚不明确** |
-| showtopic    | num  | 1     | **作用尚不明确** |
-| show_up_flag | bool | true  | **作用尚不明确** |
-| read_only    | bool | false | **作用尚不明确** |
-| show_del_log | bool | false | **作用尚不明确** |
+| 字段         | 类型 | 内容                     | 备注 |
+| ------------ | ---- | ------------------------ | ---- |
+| showadmin    | num  | 是否显示管理置顶         |      |
+| showentry    | num  | ？                       |      |
+| showfloor    | num  | 是否显示楼层号           |      |
+| showtopic    | num  | 是否显示话题             |      |
+| show_up_flag | bool | 是否显示“UP觉得很赞”标志 |      |
+| read_only    | bool | 是否只读评论区           |      |
+| show_del_log | bool | 是否显示删除记录         |      |
 
 `data`中的`replies`数组：
 
@@ -4699,7 +4708,7 @@ curl -G 'http://api.bilibili.com/x/v2/reply/main' \
 
 </details>
 
-## 获取指定评论条目及二级回复明细1（分离结构 无楼层号）
+## 获取指定评论条目及二级回复明细（分离结构 无楼层号）
 
 > http://api.bilibili.com/x/v2/reply/reply
 
@@ -4735,7 +4744,7 @@ curl -G 'http://api.bilibili.com/x/v2/reply/main' \
 
 | 字段         | 类型                             | 内容     | 备注             |
 | ------------ | -------------------------------- | -------- | ---------------- |
-| config       | obj                              | 属性信息 |                  |
+| config       | obj                              | 评论区显示控制 |                  |
 | control      | obj                              | 评论区输入属性 |                  |
 | page         | obj                              | 页信息   |                  |
 | replies      | array | 二级评论列表 |                  |
@@ -4754,15 +4763,15 @@ curl -G 'http://api.bilibili.com/x/v2/reply/main' \
 
 `data`中的`config`对象：
 
-| 字段         | 类型 | 内容  | 备注             |
-| ------------ | ---- | ----- | ---------------- |
-| showadmin    | num  | 0     | **作用尚不明确** |
-| showentry    | num  | 0     | **作用尚不明确** |
-| showfloor    | num  | 0     | **作用尚不明确** |
-| showtopic    | num  | 0     | **作用尚不明确** |
-| show_up_flag | bool | false | **作用尚不明确** |
-| read_only    | bool | false | **作用尚不明确** |
-| show_del_log | bool | false | **作用尚不明确** |
+| 字段         | 类型 | 内容                     | 备注 |
+| ------------ | ---- | ------------------------ | ---- |
+| showadmin    | num  | 是否显示管理置顶         |      |
+| showentry    | num  | ？                       |      |
+| showfloor    | num  | 是否显示楼层号           |      |
+| showtopic    | num  | 是否显示话题             |      |
+| show_up_flag | bool | 是否显示“UP觉得很赞”标志 |      |
+| read_only    | bool | 是否只读评论区           |      |
+| show_del_log | bool | 是否显示删除记录         |      |
 
 `data`中的`replies`数组：
 
@@ -5437,7 +5446,7 @@ curl -G 'http://api.bilibili.com/x/v2/reply/reply' \
 
 
 
-## 获取指定评论条目及二级回复明细2（嵌套结构 带有楼层号）
+## 获取指定评论条目及二级回复明细（嵌套结构 带有楼层号）
 
 > http://api.bilibili.com/x/v2/reply/detail
 
@@ -5478,7 +5487,7 @@ curl -G 'http://api.bilibili.com/x/v2/reply/reply' \
 | blacklist | num  | 0              | **作用尚不明确**                       |
 | vote      | num  | 0              | **作用尚不明确**                       |
 | lottery   | num  | 0              | **作用尚不明确**                       |
-| config    | obj  | 属性信息       |                                        |
+| config    | obj  | 评论区显示控制 |                                        |
 | upper     | obj  | UP主UID        |                                        |
 | show_bvid | bool | true           | **作用尚不明确**                       |
 | control   | obj  | 评论区输入属性 |                                        |
@@ -5496,15 +5505,15 @@ curl -G 'http://api.bilibili.com/x/v2/reply/reply' \
 
 `data`中的`config`对象：
 
-| 字段         | 类型 | 内容  | 备注             |
-| ------------ | ---- | ----- | ---------------- |
-| showadmin    | num  | 1     | **作用尚不明确** |
-| showentry    | num  | 1     | **作用尚不明确** |
-| showfloor    | num  | 0     | **作用尚不明确** |
-| showtopic    | num  | 1     | **作用尚不明确** |
-| show_up_flag | bool | true  | **作用尚不明确** |
-| read_only    | bool | false | **作用尚不明确** |
-| show_del_log | bool | false | **作用尚不明确** |
+| 字段         | 类型 | 内容                     | 备注 |
+| ------------ | ---- | ------------------------ | ---- |
+| showadmin    | num  | 是否显示管理置顶         |      |
+| showentry    | num  | ？                       |      |
+| showfloor    | num  | 是否显示楼层号           |      |
+| showtopic    | num  | 是否显示话题             |      |
+| show_up_flag | bool | 是否显示“UP觉得很赞”标志 |      |
+| read_only    | bool | 是否只读评论区           |      |
+| show_del_log | bool | 是否显示删除记录         |      |
 
 `data`中的`upper`对象：
 
@@ -6237,7 +6246,7 @@ curl -G 'http://api.bilibili.com/x/v2/reply/detail' \
 | blacklist | num   | 0              | **作用尚不明确** |
 | vote      | num   | 0              | **作用尚不明确** |
 | lottery   | num   | 0              | **作用尚不明确** |
-| config    | obj   | 属性信息       |                  |
+| config    | obj   | 评论区显示控制 |                  |
 | upper     | obj   | UP主UID        |                  |
 | show_bvid | bool  | true           | **作用尚不明确** |
 | control   | obj   | 评论区输入属性 |                  |
@@ -6267,15 +6276,15 @@ curl -G 'http://api.bilibili.com/x/v2/reply/detail' \
 
 `data`中的`config`对象：
 
-| 字段         | 类型 | 内容  | 备注             |
-| ------------ | ---- | ----- | ---------------- |
-| showadmin    | num  | 1     | **作用尚不明确** |
-| showentry    | num  | 1     | **作用尚不明确** |
-| showfloor    | num  | 0     | **作用尚不明确** |
-| showtopic    | num  | 1     | **作用尚不明确** |
-| show_up_flag | bool | true  | **作用尚不明确** |
-| read_only    | bool | false | **作用尚不明确** |
-| show_del_log | bool | false | **作用尚不明确** |
+| 字段         | 类型 | 内容                     | 备注 |
+| ------------ | ---- | ------------------------ | ---- |
+| showadmin    | num  | 是否显示管理置顶         |      |
+| showentry    | num  | ？                       |      |
+| showfloor    | num  | 是否显示楼层号           |      |
+| showtopic    | num  | 是否显示话题             |      |
+| show_up_flag | bool | 是否显示“UP觉得很赞”标志 |      |
+| read_only    | bool | 是否只读评论区           |      |
+| show_del_log | bool | 是否显示删除记录         |      |
 
 `data`中的`upper`对象：
 
